@@ -7,8 +7,6 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://victor-simida.org" # the base hostname & protocol for your site
 rss_url: /pages/feed.xml
 author: victor
-twitter:
-  username: masonsuyan
 
 # Sidebar filter
 # Choose 'tag' or 'category' as filter in sidebar.
@@ -27,7 +25,7 @@ filter: 'category'
 
 # disqus 设置
 disqus:
-  shortname: suyan-zh
+#  shortname: suyan-zh
 
 # google analytics 设置
 #ga:
