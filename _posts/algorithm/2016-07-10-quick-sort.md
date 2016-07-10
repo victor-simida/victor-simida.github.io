@@ -27,9 +27,10 @@ func quickSort(low, high int) {
 			swap(m, i)
 		}
 	}
-
+    
+    /*这里做递归处理*/
 	swap(low, m)
-	quickSort(low, m)
+	quickSort(low, m)       
 	quickSort(m + 1, high)
 
 }
