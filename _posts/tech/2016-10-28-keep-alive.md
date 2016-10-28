@@ -15,6 +15,7 @@ description:
 ```
 
 上面测试的结果是，会产生10个不同的连接，也就是说在一个请求没有响应完成之前，有新的请求进来，还是会生成一个新的连接，如下：
+
 [liziang@test-1 ~]$ netstat -an |grep 7777
 tcp        0      0 192.168.1.15:50693      172.16.16.98:7777       ESTABLISHED
 tcp        0      0 192.168.1.15:50696      172.16.16.98:7777       ESTABLISHED
@@ -34,6 +35,9 @@ tcp        0      0 192.168.1.15:50699      172.16.16.98:7777       ESTABLISHED
 		Get("http://172.16.16.98:7777/test")
 	}
 ```
+
+显示如下：
+
 [liziang@test-1 ~]$ netstat -an |grep 7777
 tcp        0      0 192.168.1.15:50760      172.16.16.98:7777       ESTABLISHED
 [liziang@test-1 ~]$ netstat -an |grep 7777
