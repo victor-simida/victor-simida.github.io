@@ -12,70 +12,70 @@ description:
 
 ```go
 func StructClone(src, dst interface{}) {
-	t1 := reflect.TypeOf(src).Elem()
-	t2 := reflect.TypeOf(dst).Elem()
-	v1 := reflect.ValueOf(src).Elem()
-	v2 := reflect.ValueOf(dst).Elem()
+    t1 := reflect.TypeOf(src).Elem()
+    t2 := reflect.TypeOf(dst).Elem()
+    v1 := reflect.ValueOf(src).Elem()
+    v2 := reflect.ValueOf(dst).Elem()
 
-	for i := 0; i < t1.NumField(); i++ {
-		t1_temp := t1.Field(i)
-		name := t1_temp.Name
-		t2_temp, ok := t2.FieldByName(name)
-		if !ok {
-			continue
-		}
+    for i := 0; i < t1.NumField(); i++ {
+        t1_temp := t1.Field(i)
+        name := t1_temp.Name
+        t2_temp, ok := t2.FieldByName(name)
+        if !ok {
+            continue
+        }
 
-		v1_temp := v1.FieldByName(name)
-		v2_temp := v2.FieldByName(name)
+        v1_temp := v1.FieldByName(name)
+        v2_temp := v2.FieldByName(name)
 
-		if t2_temp.Type == t1_temp.Type {
-			v2_temp.Set(v1_temp)
-		}else {
+        if t2_temp.Type == t1_temp.Type {
+            v2_temp.Set(v1_temp)
+        }else {
 
-			switch t2_temp.Type.Kind() {
-			case reflect.String:
-				switch t1_temp.Type.Kind() {
-				case reflect.Int:
-					v2_temp.SetString(v1_temp.String())
-				case reflect.TypeOf(time.Time{}).Kind():
-					temp := v1_temp.Interface().(time.Time)
-					v2_temp.SetString(temp.Format("2006-01-02 15:04:05"))
-				}
-			case reflect.Int :
-				switch t1_temp.Type.Kind() {
-				case reflect.String:
-					temp, err := strconv.ParseInt(v1_temp.String(), 10, 64)
-					if err == nil {
-						v2_temp.SetInt(temp)
-					}
-				}
-			case reflect.Int64 :
-				switch t1_temp.Type.Kind() {
-				case reflect.String:
-					temp, err := strconv.ParseInt(v1_temp.String(), 10, 64)
-					if err == nil {
-						v2_temp.SetInt(temp)
-					}
-				case reflect.Int:
-					v2_temp.SetInt(v1_temp.Int())
-				case reflect.TypeOf(time.Time{}).Kind():
-					v2_temp.SetInt(v1_temp.Interface().(time.Time).Unix())
-				}
-			case reflect.TypeOf(time.Time{}).Kind():
-				switch t1_temp.Type.Kind() {
-				case reflect.String:
-					temp, err := time.ParseInLocation("2006-01-02 15:04:05", v1_temp.String(), time.Local)
-					if err == nil {
-						v2_temp.Set(reflect.ValueOf(temp))
-					}
-				case reflect.Int:
-					v2_temp.Set(reflect.ValueOf(time.Unix(v1_temp.Int(), 0)))
-				case reflect.Int64:
-					v2_temp.Set(reflect.ValueOf(time.Unix(v1_temp.Int(), 0)))
-				}
-			}
-		}
-	}
+            switch t2_temp.Type.Kind() {
+            case reflect.String:
+                switch t1_temp.Type.Kind() {
+                case reflect.Int:
+                    v2_temp.SetString(v1_temp.String())
+                case reflect.TypeOf(time.Time{}).Kind():
+                    temp := v1_temp.Interface().(time.Time)
+                    v2_temp.SetString(temp.Format("2006-01-02 15:04:05"))
+                }
+            case reflect.Int :
+                switch t1_temp.Type.Kind() {
+                case reflect.String:
+                    temp, err := strconv.ParseInt(v1_temp.String(), 10, 64)
+                    if err == nil {
+                        v2_temp.SetInt(temp)
+                    }
+                }
+            case reflect.Int64 :
+                switch t1_temp.Type.Kind() {
+                case reflect.String:
+                    temp, err := strconv.ParseInt(v1_temp.String(), 10, 64)
+                    if err == nil {
+                        v2_temp.SetInt(temp)
+                    }
+                case reflect.Int:
+                    v2_temp.SetInt(v1_temp.Int())
+                case reflect.TypeOf(time.Time{}).Kind():
+                    v2_temp.SetInt(v1_temp.Interface().(time.Time).Unix())
+                }
+            case reflect.TypeOf(time.Time{}).Kind():
+                switch t1_temp.Type.Kind() {
+                case reflect.String:
+                    temp, err := time.ParseInLocation("2006-01-02 15:04:05", v1_temp.String(), time.Local)
+                    if err == nil {
+                        v2_temp.Set(reflect.ValueOf(temp))
+                    }
+                case reflect.Int:
+                    v2_temp.Set(reflect.ValueOf(time.Unix(v1_temp.Int(), 0)))
+                case reflect.Int64:
+                    v2_temp.Set(reflect.ValueOf(time.Unix(v1_temp.Int(), 0)))
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -85,68 +85,68 @@ func StructClone(src, dst interface{}) {
 
 ```go
 func StructClone2(src, dst interface{},src_name,dst_name string) string {
-	t1 := reflect.TypeOf(src).Elem()
-	t2 := reflect.TypeOf(dst).Elem()
+    t1 := reflect.TypeOf(src).Elem()
+    t2 := reflect.TypeOf(dst).Elem()
 
-	var result string
+    var result string
 
 
-	for i := 0; i < t1.NumField(); i++ {
-		t1_temp := t1.Field(i)
-		name := t1_temp.Name
-		t2_temp, ok := t2.FieldByName(name)
-		if !ok {
-			continue
-		}
+    for i := 0; i < t1.NumField(); i++ {
+        t1_temp := t1.Field(i)
+        name := t1_temp.Name
+        t2_temp, ok := t2.FieldByName(name)
+        if !ok {
+            continue
+        }
 
-		if t2_temp.Type == t1_temp.Type {
-			result = fmt.Sprintf("%s    %s.%s = %s.%s\n", result, dst_name, name, src_name, name)
-		}else {
-			switch t2_temp.Type.Kind() {
-			case reflect.String:
-				switch t1_temp.Type.Kind() {
-				case reflect.Int:
-					result = fmt.Sprintf("%s    %s.%s = strconv.Itoa(%s.%s)\n", result, dst_name, name, src_name, name)
-				case reflect.TypeOf(time.Time{}).Kind():
-					result = fmt.Sprintf("%s    %s.%s = %s.%s.Format(\"2006-01-02 15:04:05\")\n", result, dst_name, name, src_name, name)
-				default:
-					result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
-				}
-			case reflect.Int :
-				switch t1_temp.Type.Kind() {
-				case reflect.String:
-					result = fmt.Sprintf("%s    temp, err := strconv.ParseInt(%s.%s, 10, 64)\n    %s.%s = temp\n", result, src_name, name, dst_name, name)
-				case reflect.TypeOf(time.Time{}).Kind():
-					result = fmt.Sprintf("%s    %s.%s = int(%s.%s.Unix())\n", result, dst_name, name, src_name, name)
-				default:
-					result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
-				}
-			case reflect.Int64 :
-				switch t1_temp.Type.Kind() {
-				case reflect.String:
-					result = fmt.Sprintf("%s    temp, err := strconv.ParseInt(%s.%s, 10, 64)\n    %s.%s = temp\n", result, src_name, name, dst_name, name)
-				case reflect.Int:
-					result = fmt.Sprintf("%s    %s.%s = int64(%s.%s)\n", result, dst_name, name, src_name, name)
-				case reflect.TypeOf(time.Time{}).Kind():
-					result = fmt.Sprintf("%s    %s.%s = %s.%s.Unix()\n", result, dst_name, name, src_name, name)
-				default:
-					result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
-				}
-			case reflect.TypeOf(time.Time{}).Kind():
-				switch t1_temp.Type.Kind() {
-				case reflect.String:
-					result = fmt.Sprintf("%s    temp2, err := time.ParseInLocation(\"2006-01-02 15:04:05\", %s.%s, time.Local)\n    %s.%s = temp2\n", result, src_name, name, dst_name, name)
-				case reflect.Int:
-					result = fmt.Sprintf("%s    %s.%s = time.Unix(%s.%s,0)\n", result, dst_name, name, src_name, name)
-				case reflect.Int64:
-					result = fmt.Sprintf("%s    %s.%s = time.Unix(%s.%s,0)\n", result, dst_name, name, src_name, name)
-				default:
-					result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
-				}
-			}
-		}
-	}
+        if t2_temp.Type == t1_temp.Type {
+            result = fmt.Sprintf("%s    %s.%s = %s.%s\n", result, dst_name, name, src_name, name)
+        }else {
+            switch t2_temp.Type.Kind() {
+            case reflect.String:
+                switch t1_temp.Type.Kind() {
+                case reflect.Int:
+                    result = fmt.Sprintf("%s    %s.%s = strconv.Itoa(%s.%s)\n", result, dst_name, name, src_name, name)
+                case reflect.TypeOf(time.Time{}).Kind():
+                    result = fmt.Sprintf("%s    %s.%s = %s.%s.Format(\"2006-01-02 15:04:05\")\n", result, dst_name, name, src_name, name)
+                default:
+                    result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
+                }
+            case reflect.Int :
+                switch t1_temp.Type.Kind() {
+                case reflect.String:
+                    result = fmt.Sprintf("%s    temp, err := strconv.ParseInt(%s.%s, 10, 64)\n    %s.%s = temp\n", result, src_name, name, dst_name, name)
+                case reflect.TypeOf(time.Time{}).Kind():
+                    result = fmt.Sprintf("%s    %s.%s = int(%s.%s.Unix())\n", result, dst_name, name, src_name, name)
+                default:
+                    result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
+                }
+            case reflect.Int64 :
+                switch t1_temp.Type.Kind() {
+                case reflect.String:
+                    result = fmt.Sprintf("%s    temp, err := strconv.ParseInt(%s.%s, 10, 64)\n    %s.%s = temp\n", result, src_name, name, dst_name, name)
+                case reflect.Int:
+                    result = fmt.Sprintf("%s    %s.%s = int64(%s.%s)\n", result, dst_name, name, src_name, name)
+                case reflect.TypeOf(time.Time{}).Kind():
+                    result = fmt.Sprintf("%s    %s.%s = %s.%s.Unix()\n", result, dst_name, name, src_name, name)
+                default:
+                    result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
+                }
+            case reflect.TypeOf(time.Time{}).Kind():
+                switch t1_temp.Type.Kind() {
+                case reflect.String:
+                    result = fmt.Sprintf("%s    temp2, err := time.ParseInLocation(\"2006-01-02 15:04:05\", %s.%s, time.Local)\n    %s.%s = temp2\n", result, src_name, name, dst_name, name)
+                case reflect.Int:
+                    result = fmt.Sprintf("%s    %s.%s = time.Unix(%s.%s,0)\n", result, dst_name, name, src_name, name)
+                case reflect.Int64:
+                    result = fmt.Sprintf("%s    %s.%s = time.Unix(%s.%s,0)\n", result, dst_name, name, src_name, name)
+                default:
+                    result = fmt.Sprintf("%s    //TODO\n    %s.%s With %s.%s\n", result, dst_name, name, src_name, name)
+                }
+            }
+        }
+    }
 
-	return result
+    return result
 }
 ```
