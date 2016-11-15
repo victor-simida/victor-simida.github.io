@@ -1,6 +1,6 @@
 ---
 layout: post
-title:通过反射实现
+title:通过反射实现结构体拷贝
 category: 技术
 tags: Go
 description: 
